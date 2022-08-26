@@ -1,0 +1,14 @@
+{
+  "name": "graveyard-keeper-bot",
+  "version": "0.1.0",
+  "main": "build/index.js",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "concurrently": "^7.3.0",
+    "nodemon": "^2.0.19"
+  },
+  "dependencies": {
+    "discord.js": "^14.3.0"
+  }
+}
