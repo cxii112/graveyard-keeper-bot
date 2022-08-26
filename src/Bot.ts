@@ -18,9 +18,7 @@ export class Bot {
     this.client = new Client({intents});
     this.client.login(discordToken)
       .then(_ => this.assignEventListeners())
-      .catch(this.onFail)
-    ;
-    // this.assignEventListeners();
+      .catch(this.onFail);
   }
 
   private assignEventListeners() {
@@ -29,7 +27,9 @@ export class Bot {
   }
 
   private onReady(client: Client) {
-    console.log("Bot is ready");
+    let name = client.user!.username;
+    let timestamp = new Date(client.readyTimestamp || 0);
+    console.log(`Bot ${name} is ready at ${timestamp.toISOString()}`);
   }
 
   private onFail(reason: any) {
