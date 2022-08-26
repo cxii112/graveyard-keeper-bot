@@ -17,6 +17,6 @@
   "scripts": {
     "dev": "nodemon --watch",
     "build": "tsc",
-    "start": "node"
+    "start": "node build/index.js"
   }
 }
