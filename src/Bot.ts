@@ -1,24 +1,42 @@
-import {Client, GatewayIntentBits, IntentsBitField} from "discord.js";
+import {Client, Guild, IntentsBitField} from "discord.js";
 
 export class Bot {
+  private _isReady: boolean = false;
   private discordToken: string;
-  private discordBotId: string;
   private client: Client;
+  private intents = [
+    IntentsBitField.Flags.GuildMessages,
+    IntentsBitField.Flags.GuildMessageTyping,
+    IntentsBitField.Flags.GuildMembers,
+    IntentsBitField.Flags.GuildPresences,
+    IntentsBitField.Flags.Guilds
+  ];
 
-  constructor(discordToken: string, discordBotId: string) {
+  constructor(discordToken: string) {
     this.discordToken = discordToken;
-    this.discordBotId = discordBotId;
-    let intents = [
-      IntentsBitField.Flags.GuildMessages,
-      IntentsBitField.Flags.GuildMessageTyping,
-      IntentsBitField.Flags.GuildMembers,
-      IntentsBitField.Flags.GuildPresences,
-      IntentsBitField.Flags.Guilds
-    ];
-    this.client = new Client({intents});
+    this.client = new Client({intents: this.intents});
     this.client.login(discordToken)
       .then(_ => this.assignEventListeners())
       .catch(this.onFail);
+  }
+
+  public get isReady(): boolean {
+    return this._isReady;
+  }
+
+  public getMembersOfGuild(guildID: string | undefined) {
+    if (guildID === undefined) return [];
+
+    const GUILD = this.client.guilds.resolve(guildID);
+    if (GUILD === undefined) return [];
+    if (GUILD?.members === undefined || GUILD.members === null) return [];
+
+    GUILD.members.cache.map(member => {
+      console.log(`${member.id} ${member.user.username}` +
+                    `${member.nickname ? ` aka ${member.nickname}` : ""}`);
+    });
+
+    return GUILD.members;
   }
 
   private assignEventListeners() {
@@ -27,6 +45,7 @@ export class Bot {
   }
 
   private onReady(client: Client) {
+    this._isReady = true;
     let name = client.user!.username;
     let timestamp = new Date(client.readyTimestamp || 0);
     console.log(`Bot ${name} is ready at ${timestamp.toISOString()}`);

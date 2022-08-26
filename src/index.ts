@@ -6,10 +6,12 @@ if (require.main === module) {
   let bot: Bot;
   try {
     config = load();
-    bot = new Bot(config.DISCORD_TOKEN,
-                  config.DISCORD_BOT_ID);
+    bot = new Bot(config.DISCORD_TOKEN);
   } catch (e) {
     console.error((e as Error).message);
     process.exit(1);
   }
+  setTimeout(() => {
+    bot.getMembersOfGuild(config.GUILD_ID);
+  }, 1000 * 10);
 }
