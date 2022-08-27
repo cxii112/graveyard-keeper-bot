@@ -12,6 +12,14 @@ if (require.main === module) {
     process.exit(1);
   }
   setTimeout(() => {
-    bot.getMembersOfGuild(config.GUILD_ID);
+    bot.getMembersOfGuild(config.GUILD_ID)
+      .filter(member => {
+        if (member.roles.resolve("911123554291056650")) return true;
+        return false;
+      })
+      .map(member => {
+        console.log(`${member.id} ${member.user.tag}` +
+        `${member.nickname ? ` aka ${member.nickname}` : ""}`)
+      });
   }, 1000 * 10);
 }

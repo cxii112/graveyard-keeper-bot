@@ -1,4 +1,4 @@
-import {Client, Guild, IntentsBitField} from "discord.js";
+import {Client, Guild, GuildMember, IntentsBitField} from "discord.js";
 
 export class Bot {
   private _isReady: boolean = false;
@@ -24,19 +24,17 @@ export class Bot {
     return this._isReady;
   }
 
-  public getMembersOfGuild(guildID: string | undefined) {
+  public getMembersOfGuild(guildID: string | undefined): GuildMember[] {
     if (guildID === undefined) return [];
 
     const GUILD = this.client.guilds.resolve(guildID);
     if (GUILD === undefined) return [];
     if (GUILD?.members === undefined || GUILD.members === null) return [];
 
-    GUILD.members.cache.map(member => {
-      console.log(`${member.id} ${member.user.username}` +
-                    `${member.nickname ? ` aka ${member.nickname}` : ""}`);
-    });
+    let members: GuildMember[] = [];
+    GUILD.members.cache.map(member => members.push(member));
 
-    return GUILD.members;
+    return members;
   }
 
   private assignEventListeners() {
