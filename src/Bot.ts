@@ -1,8 +1,7 @@
-import {Client, Guild, GuildMember, IntentsBitField} from "discord.js";
+import {Client, GuildMember, IntentsBitField} from "discord.js";
 
 export class Bot {
-  private _isReady: boolean = false;
-  private discordToken: string;
+  private readonly discordToken: string;
   private client: Client;
   private intents = [
     IntentsBitField.Flags.GuildMessages,
@@ -15,21 +14,27 @@ export class Bot {
   constructor(discordToken: string) {
     this.discordToken = discordToken;
     this.client = new Client({intents: this.intents});
-    this.client.login(discordToken)
-      .then(_ => this.assignEventListeners())
-      .catch(this.onFail);
   }
 
-  public get isReady(): boolean {
-    return this._isReady;
+  public async start() {
+    try {
+      await this.client.login(this.discordToken);
+      await this.client.guilds.fetch();
+      this.assignEventListeners();
+    } catch (e) {
+      this.onFail(e);
+    }
   }
 
-  public getMembersOfGuild(guildID: string | undefined): GuildMember[] {
+  public async getMembersOfGuild(guildID: string | undefined): Promise<GuildMember[]> {
     if (guildID === undefined) return [];
 
-    const GUILD = this.client.guilds.resolve(guildID);
+    const GUILD = await this.client.guilds.resolve(guildID);
     if (GUILD === undefined) return [];
-    if (GUILD?.members === undefined || GUILD.members === null) return [];
+
+    if (GUILD?.members === undefined
+      || GUILD.members === null
+      || GUILD.members.cache.size === 0) return [];
 
     let members: GuildMember[] = [];
     GUILD.members.cache.map(member => members.push(member));
@@ -43,7 +48,6 @@ export class Bot {
   }
 
   private onReady(client: Client) {
-    this._isReady = true;
     let name = client.user!.username;
     let timestamp = new Date(client.readyTimestamp || 0);
     console.log(`Bot ${name} is ready at ${timestamp.toISOString()}`);
