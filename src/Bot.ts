@@ -1,4 +1,5 @@
-import {Client, GuildMember, IntentsBitField} from "discord.js";
+import {Client, GuildMember, IntentsBitField, TextChannel} from "discord.js";
+import {raw} from "concurrently/dist/src/defaults";
 
 export class Bot {
   private readonly discordToken: string;
@@ -40,6 +41,18 @@ export class Bot {
     GUILD.members.cache.map(member => members.push(member));
 
     return members;
+  }
+
+  public async sendMessage(guildId:string | undefined, channelId:string, message: string)
+  {
+    if (guildId === undefined) return;
+
+    let guild = await this.client.guilds.fetch(guildId);
+    let channel = await guild?.channels.fetch(channelId);
+    if (!channel!.isTextBased()) return;
+
+    let textChannel = (channel as TextChannel);
+    textChannel.send(`${message}`);
   }
 
   private assignEventListeners() {
