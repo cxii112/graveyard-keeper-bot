@@ -1,4 +1,4 @@
-import {Client, GuildMember, IntentsBitField, TextChannel} from "discord.js";
+import {Client, GuildMember, IntentsBitField, TextChannel, userMention} from "discord.js";
 import {raw} from "concurrently/dist/src/defaults";
 
 export class Bot {
@@ -43,8 +43,7 @@ export class Bot {
     return members;
   }
 
-  public async sendMessage(guildId:string | undefined, channelId:string, message: string)
-  {
+  public async sendMessage(guildId: string | undefined, channelId: string, message: string) {
     if (guildId === undefined) return;
 
     let guild = await this.client.guilds.fetch(guildId);
@@ -53,6 +52,14 @@ export class Bot {
 
     let textChannel = (channel as TextChannel);
     textChannel.send(`${message}`);
+  }
+
+  public async sendMessageWithMention(guildId: string | undefined,
+                                      channelId: string,
+                                      userId: string,
+                                      message: string) {
+    let mention = userMention(userId);
+    this.sendMessage(guildId, channelId, `${mention}, ${message}`);
   }
 
   private assignEventListeners() {
