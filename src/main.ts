@@ -7,7 +7,8 @@ export default async function main() {
     DISCORD_TOKEN,
     GUILD_ID,
     CHANNEL_ID,
-    ROLE_ID
+    ROLE_ID,
+    PORT
   } = load();
   let bot: Bot;
   try {
