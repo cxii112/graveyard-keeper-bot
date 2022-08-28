@@ -1,26 +1,12 @@
 import dotenv from "dotenv";
 
-
-export function load(): Config {
-
+export function load() {
   dotenv.config();
-  const PORT = process.env.PORT || "3000";
-  const DISCORD_TOKEN = process.env.DISCORD_TOKEN;
-  const GUILD_ID = process.env.GUILD_ID;
-
-  if (DISCORD_TOKEN === undefined) {
-    throw new Error("Discord token is missing");
-  }
-
   return {
-    PORT,
-    DISCORD_TOKEN,
-    GUILD_ID,
+    PORT: process.env.PORT || "3000",
+    DISCORD_TOKEN: process.env.DISCORD_TOKEN,
+    GUILD_ID: process.env.GUILD_ID,
+    CHANNEL_ID: process.env.CHANNEL_ID,
+    ROLE_ID: process.env.ROLE_ID,
   };
-}
-
-export interface Config {
-  PORT: string,
-  DISCORD_TOKEN: string,
-  GUILD_ID: string | undefined,
 }

@@ -13,39 +13,35 @@ export class Bot {
   ];
 
   constructor(discordToken: string) {
+    if (!discordToken) throw new Error("discordToken must be defined.");
     this.discordToken = discordToken;
     this.client = new Client({intents: this.intents});
   }
 
   public async start() {
     try {
+      this.assignEventListeners();
       await this.client.login(this.discordToken);
       await this.client.guilds.fetch();
-      this.assignEventListeners();
     } catch (e) {
       this.onFail(e);
     }
   }
 
-  public async getMembersOfGuild(guildID: string | undefined): Promise<GuildMember[]> {
-    if (guildID === undefined) return [];
-
+  public async getMembersOfGuild(guildID: string): Promise<GuildMember[]> {
     const GUILD = await this.client.guilds.resolve(guildID);
     if (GUILD === undefined) return [];
 
-    if (GUILD?.members === undefined
-      || GUILD.members === null
-      || GUILD.members.cache.size === 0) return [];
+    await GUILD?.members.fetch();
+    if (GUILD?.members.cache.size === 0) return [];
 
     let members: GuildMember[] = [];
-    GUILD.members.cache.map(member => members.push(member));
+    GUILD?.members.cache.map(member => members.push(member));
 
     return members;
   }
 
-  public async sendMessage(guildId: string | undefined, channelId: string, message: string) {
-    if (guildId === undefined) return;
-
+  public async sendMessage(guildId: string, channelId: string, message: string) {
     let guild = await this.client.guilds.fetch(guildId);
     let channel = await guild?.channels.fetch(channelId);
     if (!channel!.isTextBased()) return;
@@ -54,12 +50,13 @@ export class Bot {
     textChannel.send(`${message}`);
   }
 
-  public async sendMessageWithMention(guildId: string | undefined,
+  public async sendMessageWithMention(guildId: string,
                                       channelId: string,
                                       userId: string,
-                                      message: string) {
+                                      messageTemplate: string) {
     let mention = userMention(userId);
-    this.sendMessage(guildId, channelId, `${mention}, ${message}`);
+    let payload = messageTemplate.replace("<>", mention);
+    this.sendMessage(guildId, channelId, payload);
   }
 
   private assignEventListeners() {
@@ -71,6 +68,7 @@ export class Bot {
     let name = client.user!.username;
     let timestamp = new Date(client.readyTimestamp || 0);
     console.log(`Bot ${name} is ready at ${timestamp.toISOString()}`);
+    client.guilds.fetch();
   }
 
   private onFail(reason: any) {
