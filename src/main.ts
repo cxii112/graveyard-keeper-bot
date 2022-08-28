@@ -1,6 +1,6 @@
 import {load} from "./config";
 import {Bot} from "./Bot";
-import phrases from "../resources/phrases.json";
+import phrases from "./phrases.json";
 
 export default async function main() {
   const {
