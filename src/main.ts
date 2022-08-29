@@ -8,11 +8,11 @@ export default async function main() {
     GUILD_ID,
     CHANNEL_ID,
     ROLE_ID,
-    PORT
+    TIME_INTERVAL
   } = load();
   let bot: Bot;
   try {
-    checkEnvVars(DISCORD_TOKEN,GUILD_ID,CHANNEL_ID,ROLE_ID);
+    checkEnvVars(DISCORD_TOKEN, GUILD_ID, CHANNEL_ID, ROLE_ID);
     bot = new Bot(DISCORD_TOKEN!);
   } catch (e) {
     console.error((e as Error).message);
@@ -20,9 +20,12 @@ export default async function main() {
   }
   await bot.start();
 
+  sendMentions(bot, GUILD_ID!, CHANNEL_ID!, ROLE_ID!);
   setInterval(
-    () => sendMentions(bot, GUILD_ID!, CHANNEL_ID!, ROLE_ID!),
-    1000 * 60 * 10
+    () => {
+      sendMentions(bot, GUILD_ID!, CHANNEL_ID!, ROLE_ID!);
+    },
+    Number(TIME_INTERVAL!)
   );
 }
 
@@ -30,13 +33,11 @@ async function sendMentions(bot: Bot,
                             guildId: string,
                             channelId: string,
                             roleId: string) {
+  bot.sendMessageWithRoleMention(guildId, channelId, roleId, "Перекличка, <>.");
   let shuffled = shuffle(phrases);
   let filtered = await filterByRole(bot, guildId, roleId);
   filtered.forEach((member, index) => {
-    bot.sendMessageWithMention(guildId,
-                               channelId,
-                               member.id,
-                               shuffled[index]);
+    bot.sendMessageWithUserMention(guildId, channelId, member.id, shuffled[index % shuffled.length]);
   });
 }
 
