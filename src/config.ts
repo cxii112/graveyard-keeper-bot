@@ -8,5 +8,6 @@ export function load() {
     GUILD_ID: process.env.GUILD_ID,
     CHANNEL_ID: process.env.CHANNEL_ID,
     ROLE_ID: process.env.ROLE_ID,
+    TIME_INTERVAL: process.env.TIME_INTERVAL
   };
 }

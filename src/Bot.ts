@@ -1,4 +1,4 @@
-import {Client, GuildMember, IntentsBitField, TextChannel, userMention} from "discord.js";
+import {Client, GuildMember, IntentsBitField, roleMention, TextChannel, userMention} from "discord.js";
 import {raw} from "concurrently/dist/src/defaults";
 
 export class Bot {
@@ -48,13 +48,23 @@ export class Bot {
 
     let textChannel = (channel as TextChannel);
     textChannel.send(`${message}`);
+    console.log(`Send "${message}" in ${guild.name} to ${textChannel.name}`)
   }
 
-  public async sendMessageWithMention(guildId: string,
-                                      channelId: string,
-                                      userId: string,
-                                      messageTemplate: string) {
+  public async sendMessageWithUserMention(guildId: string,
+                                          channelId: string,
+                                          userId: string,
+                                          messageTemplate: string) {
     let mention = userMention(userId);
+    let payload = messageTemplate.replace("<>", mention);
+    this.sendMessage(guildId, channelId, payload);
+  }
+
+  public async sendMessageWithRoleMention(guildId: string,
+                                          channelId: string,
+                                          roleId: string,
+                                          messageTemplate: string) {
+    let mention = roleMention(roleId);
     let payload = messageTemplate.replace("<>", mention);
     this.sendMessage(guildId, channelId, payload);
   }
