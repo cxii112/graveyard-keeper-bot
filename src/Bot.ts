@@ -11,6 +11,7 @@ export class Bot {
     IntentsBitField.Flags.GuildPresences,
     IntentsBitField.Flags.Guilds
   ];
+  private readonly mentionTemplate = /(<>)/gm;
 
   constructor(discordToken: string) {
     if (!discordToken) throw new Error("discordToken must be defined.");
@@ -56,7 +57,7 @@ export class Bot {
                                           userId: string,
                                           messageTemplate: string) {
     let mention = userMention(userId);
-    let payload = messageTemplate.replace("<>", mention);
+    let payload = messageTemplate.replace(this.mentionTemplate, mention);
     this.sendMessage(guildId, channelId, payload);
   }
 
@@ -65,7 +66,7 @@ export class Bot {
                                           roleId: string,
                                           messageTemplate: string) {
     let mention = roleMention(roleId);
-    let payload = messageTemplate.replace("<>", mention);
+    let payload = messageTemplate.replace(this.mentionTemplate, mention);
     this.sendMessage(guildId, channelId, payload);
   }
 
