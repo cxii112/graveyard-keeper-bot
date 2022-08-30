@@ -28,7 +28,6 @@ export default async function main() {
   //   },
   //   timeInterval
   // );
-  process.exit(0);
 }
 
 async function sendMentions(bot: Bot,
