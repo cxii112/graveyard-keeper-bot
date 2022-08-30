@@ -10,6 +10,7 @@ export default async function main() {
     ROLE_ID,
     TIME_INTERVAL
   } = load();
+  const timeInterval = Number(TIME_INTERVAL);
   let bot: Bot;
   try {
     checkEnvVars(DISCORD_TOKEN, GUILD_ID, CHANNEL_ID, ROLE_ID);
@@ -21,12 +22,12 @@ export default async function main() {
   await bot.start();
 
   sendMentions(bot, GUILD_ID!, CHANNEL_ID!, ROLE_ID!);
-  setInterval(
-    () => {
-      sendMentions(bot, GUILD_ID!, CHANNEL_ID!, ROLE_ID!);
-    },
-    Number(TIME_INTERVAL!)
-  );
+  // setInterval(
+  //   () => {
+  //     sendMentions(bot, GUILD_ID!, CHANNEL_ID!, ROLE_ID!);
+  //   },
+  //   timeInterval
+  // );
 }
 
 async function sendMentions(bot: Bot,
