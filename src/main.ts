@@ -21,13 +21,14 @@ export default async function main() {
   }
   await bot.start();
 
-  sendMentions(bot, GUILD_ID!, CHANNEL_ID!, ROLE_ID!);
+  await sendMentions(bot, GUILD_ID!, CHANNEL_ID!, ROLE_ID!);
   // setInterval(
   //   () => {
   //     sendMentions(bot, GUILD_ID!, CHANNEL_ID!, ROLE_ID!);
   //   },
   //   timeInterval
   // );
+  process.exit(0);
 }
 
 async function sendMentions(bot: Bot,
