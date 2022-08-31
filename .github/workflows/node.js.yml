@@ -5,9 +5,9 @@ name: Node.js CI
 
 on:
   push:
+    branches: [ "main" ]
     tags:
       - '*.*.*'
-    branches: [ "main" ]
 
 jobs:
   build:
@@ -17,11 +17,9 @@ jobs:
     strategy:
       matrix:
         node-version: [16.x]
-        # See supported Node.js release schedule at https://nodejs.org/en/about/releases/
 
     steps:
     - uses: actions/checkout@master
-    # - name: Use Node.js ${{ matrix.node-version }}
     - uses: actions/setup-node@master
       with:
         node-version: ${{ matrix.node-version }}
@@ -29,18 +27,13 @@ jobs:
     - run: yarn install
     - run: yarn build
 
-    # - uses: actions/checkout@master
-    # - name: Archive Release
     - uses: thedoctor0/zip-release@main
       with:
         type: 'zip'
         filename: 'release.zip'
-        exclusions: '*.git* /*node_modules/* .editorconfig .idea'
+        exclusions: '*.git* /*node_modules/* .editorconfig .idea*'
 
-    # - uses: actions/checkout@master
     - uses: ncipollo/release-action@main
-    # - name: Upoad artifacts
       with:
         artifacts: "release.zip"
-        # bodyFile: "body.md"
         token: ${{ github.token }}
