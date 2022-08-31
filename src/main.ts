@@ -2,7 +2,7 @@ import {load} from "./config";
 import {Bot} from "./Bot";
 import phrases from "./phrases.json";
 
-module.exports = main;
+module.exports.main = main;
 
 export default async function main() {
   const {
