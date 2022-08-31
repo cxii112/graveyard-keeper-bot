@@ -30,6 +30,7 @@ jobs:
     - run: yarn build
 
   zip:
+    needs: [build]
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@master
@@ -39,3 +40,16 @@ jobs:
         type: 'zip'
         filename: 'release.zip'
         exclusions: '*.git* /*node_modules/* .editorconfig .idea'
+
+  release:
+    needs: [zip]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+    - uses: actions/checkout@master
+    - uses: ncipollo/release-action@main
+      with:
+        artifacts: "release.zip"
+        # bodyFile: "body.md"
+        token: ${{ secrets.YOUR_GITHUB_TOKEN }}
