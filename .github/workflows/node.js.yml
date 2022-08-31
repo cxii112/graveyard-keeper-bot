@@ -29,11 +29,7 @@ jobs:
     - run: yarn install
     - run: yarn build
 
-  zip:
-    needs: [build]
-    runs-on: ubuntu-latest
-    steps:
-    - uses: actions/checkout@master
+    # - uses: actions/checkout@master
     - name: Archive Release
       uses: thedoctor0/zip-release@main
       with:
@@ -41,14 +37,9 @@ jobs:
         filename: 'release.zip'
         exclusions: '*.git* /*node_modules/* .editorconfig .idea'
 
-  release:
-    needs: [zip]
-    runs-on: ubuntu-latest
-    permissions:
-      contents: write
-    steps:
-    - uses: actions/checkout@master
+    # - uses: actions/checkout@master
     - uses: ncipollo/release-action@main
+    - name: Upoad artifacts
       with:
         artifacts: "release.zip"
         # bodyFile: "body.md"
