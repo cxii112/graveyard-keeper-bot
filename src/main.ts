@@ -2,6 +2,8 @@ import {load} from "./config";
 import {Bot} from "./Bot";
 import phrases from "./phrases.json";
 
+module.exports = main;
+
 export default async function main() {
   const {
     DISCORD_TOKEN,
