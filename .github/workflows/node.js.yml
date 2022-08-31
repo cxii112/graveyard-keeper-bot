@@ -21,7 +21,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@master
-    - name: Use Node.js ${{ matrix.node-version }}
+    # - name: Use Node.js ${{ matrix.node-version }}
     - uses: actions/setup-node@master
       with:
         node-version: ${{ matrix.node-version }}
@@ -30,7 +30,7 @@ jobs:
     - run: yarn build
 
     # - uses: actions/checkout@master
-    - name: Archive Release
+    # - name: Archive Release
     - uses: thedoctor0/zip-release@main
       with:
         type: 'zip'
@@ -39,7 +39,7 @@ jobs:
 
     # - uses: actions/checkout@master
     - uses: ncipollo/release-action@main
-    - name: Upoad artifacts
+    # - name: Upoad artifacts
       with:
         artifacts: "release.zip"
         # bodyFile: "body.md"
