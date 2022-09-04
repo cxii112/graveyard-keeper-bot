@@ -30,7 +30,7 @@ jobs:
       with:
         type: 'zip'
         filename: 'release.zip'
-        exclusions: '*.git* /*node_modules/* .editorconfig /.idea'
+        exclusions: '*.git* /*node_modules/* .editorconfig *.idea* /src*'
 
     - uses: ncipollo/release-action@main
       with:
