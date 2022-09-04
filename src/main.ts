@@ -10,9 +10,7 @@ export default async function main() {
     GUILD_ID,
     CHANNEL_ID,
     ROLE_ID,
-    TIME_INTERVAL
   } = load();
-  const timeInterval = Number(TIME_INTERVAL);
   let bot: Bot;
   try {
     checkEnvVars(DISCORD_TOKEN, GUILD_ID, CHANNEL_ID, ROLE_ID);
@@ -24,23 +22,23 @@ export default async function main() {
   await bot.start();
 
   await sendMentions(bot, GUILD_ID!, CHANNEL_ID!, ROLE_ID!);
-  // setInterval(
-  //   () => {
-  //     sendMentions(bot, GUILD_ID!, CHANNEL_ID!, ROLE_ID!);
-  //   },
-  //   timeInterval
-  // );
 }
 
 async function sendMentions(bot: Bot,
                             guildId: string,
                             channelId: string,
                             roleId: string) {
-  bot.sendMessageWithRoleMention(guildId, channelId, roleId, "Перекличка, <>.");
+  await bot.sendMessageWithRoleMention(guildId,
+                                       channelId,
+                                       roleId,
+                                       "Они не сдали долги и теперь <>.");
   let shuffled = shuffle(phrases);
   let filtered = await filterByRole(bot, guildId, roleId);
   filtered.forEach((member, index) => {
-    bot.sendMessageWithUserMention(guildId, channelId, member.id, shuffled[index % shuffled.length]);
+    bot.sendMessageWithUserMention(guildId,
+                                   channelId,
+                                   member.id,
+                                   shuffled[index % shuffled.length]);
   });
 }
 
