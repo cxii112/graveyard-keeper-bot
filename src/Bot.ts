@@ -1,5 +1,4 @@
 import {Client, GuildMember, IntentsBitField, roleMention, TextChannel, userMention} from "discord.js";
-import {raw} from "concurrently/dist/src/defaults";
 
 export class Bot {
   private readonly discordToken: string;
