@@ -34,12 +34,13 @@ async function sendMentions(bot: Bot,
                                        "Они не сдали долги и теперь <>.");
   let shuffled = shuffle(phrases);
   let filtered = await filterByRole(bot, guildId, roleId);
-  filtered.forEach((member, index) => {
-    bot.sendMessageWithUserMention(guildId,
-                                   channelId,
-                                   member.id,
-                                   shuffled[index % shuffled.length]);
-  });
+  for (const member of filtered) {
+    const index = filtered.indexOf(member);
+    await bot.sendMessageWithUserMention(guildId,
+                                         channelId,
+                                         member.id,
+                                         shuffled[index % shuffled.length]);
+  }
 }
 
 async function filterByRole(bot: Bot, guildId: string, roleId: string) {
