@@ -21,7 +21,7 @@ export default async function main() {
   }
   await bot.start();
 
-  await sendMentions(bot, GUILD_ID!, CHANNEL_ID!, ROLE_ID!);
+  return sendMentions(bot, GUILD_ID!, CHANNEL_ID!, ROLE_ID!);
 }
 
 async function sendMentions(bot: Bot,
