@@ -47,8 +47,8 @@ export class Bot {
     if (!channel!.isTextBased()) return;
 
     let textChannel = (channel as TextChannel);
-    textChannel.send(`${message}`);
     console.log(`Send "${message}" in ${guild.name} to ${textChannel.name}`)
+    return textChannel.send(`${message}`);
   }
 
   public async sendMessageWithUserMention(guildId: string,
@@ -57,7 +57,7 @@ export class Bot {
                                           messageTemplate: string) {
     let mention = userMention(userId);
     let payload = messageTemplate.replace(this.mentionTemplate, mention);
-    this.sendMessage(guildId, channelId, payload);
+    return this.sendMessage(guildId, channelId, payload);
   }
 
   public async sendMessageWithRoleMention(guildId: string,
@@ -66,7 +66,7 @@ export class Bot {
                                           messageTemplate: string) {
     let mention = roleMention(roleId);
     let payload = messageTemplate.replace(this.mentionTemplate, mention);
-    this.sendMessage(guildId, channelId, payload);
+    return this.sendMessage(guildId, channelId, payload);
   }
 
   private assignEventListeners() {
