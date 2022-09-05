@@ -29,10 +29,10 @@ jobs:
     - uses: thedoctor0/zip-release@main
       with:
         type: 'zip'
-        filename: 'release.zip'
-        exclusions: '*.git* /*node_modules/* .editorconfig *.idea* /src*'
+        filename: 'graveyard-keeper-bot-{{guthub.ref_name}}.zip'
+        exclusions: '*.git* /*node_modules/* .editorconfig *.idea* /src* tsconfig* nodemon*'
 
     - uses: ncipollo/release-action@main
       with:
-        artifacts: "release.zip"
+        artifacts: "graveyard-keeper-bot-*.zip"
         token: ${{ github.token }}
